@@ -16,3 +16,14 @@ tracking:
   max_age: 30
   embedder: mobilenet
   max_cosine_distance: 0.4
+
+training:
+  epochs: 100
+  batch_size: 16
+  optimizer: AdamW
+  learning_rate: 0.001
+  early_stopping: 25
+  experiment_name: "visionflow_v1"
+
+device: "0"  # GPU ID or "cpu"
+data: "data/dataset.yaml"
