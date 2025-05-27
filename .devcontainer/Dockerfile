@@ -8,14 +8,16 @@ RUN apt-get update && apt-get install -y \
     git \
     wget \
     curl \
-    libgl1-mesa-glx \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
     libxrender-dev \
     libgomp1 \
+    libgl1-mesa-dev \
     libgstreamer1.0-dev \
     libgstreamer-plugins-base1.0-dev \
+    python3-opencv \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Set Python 3.10 as default
