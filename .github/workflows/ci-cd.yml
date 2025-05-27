@@ -33,13 +33,23 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev libgomp1
+          sudo apt-get install -y \
+            libglib2.0-0 \
+            libsm6 \
+            libxext6 \
+            libxrender-dev \
+            libgomp1 \
+            libgl1-mesa-dev \
+            libgstreamer1.0-dev \
+            libgstreamer-plugins-base1.0-dev \
+            python3-opencv \
+            ffmpeg
           
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-cov
+          pip install pytest pytest-cov flake8
           
       - name: Add project to Python path
         run: |
@@ -48,7 +58,7 @@ jobs:
       - name: Create test data directory
         run: |
           mkdir -p data/samples
-          # Create dummy test images (1x1 pixel for testing)
+          # Create dummy test images (100x100 pixel for testing)
           python -c "
           import cv2
           import numpy as np
@@ -60,7 +70,6 @@ jobs:
           
       - name: Run linting
         run: |
-          pip install flake8
           flake8 src/ --count --select=E9,F63,F7,F82 --show-source --statistics
           
       - name: Run tests with coverage
