@@ -10,7 +10,7 @@ Advanced Real-Time Object Detection & Action Recognition System
 
 ## Quick Start
 ```bash
-git clone https://github.com/yourusername/VisionFlow
+git clone https://github.com/superuser303/VisionFlow
 cd VisionFlow
 pip install -r requirements.txt
 
