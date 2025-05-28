@@ -55,17 +55,86 @@ jobs:
         run: |
           echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
           
-      - name: Create test data directory
+      - name: Setup test dataset with COCO images
         run: |
           mkdir -p data/samples
-          # Create dummy test images (100x100 pixel for testing)
+          python -c "
+          import sys
+          sys.path.append('.')
+          from src.utils.coco_utils import setup_test_dataset
+          import os
+          
+          print('Setting up test dataset...')
+          try:
+              images_dir, annotations_file = setup_test_dataset('data/samples')
+              print(f'Test dataset created at: {images_dir}')
+              print(f'Annotations file: {annotations_file}')
+              
+              # List created files
+              files = os.listdir('data/samples')
+              print(f'Created files: {files}')
+              
+              # Verify files exist
+              test_files = ['coco_sample_1.jpg', 'coco_sample_2.jpg', 'coco_sample_3.jpg']
+              for test_file in test_files:
+                  filepath = f'data/samples/{test_file}'
+                  if os.path.exists(filepath):
+                      print(f'✓ {test_file} exists')
+                  else:
+                      print(f'✗ {test_file} missing - checking for synthetic images')
+                      
+              # Check for synthetic images as fallback
+              synthetic_files = [f for f in files if f.startswith('synthetic_')]
+              if synthetic_files:
+                  print(f'Found synthetic images: {synthetic_files}')
+              
+          except Exception as e:
+              print(f'Error setting up test dataset: {e}')
+              import traceback
+              traceback.print_exc()
+              
+              # Create minimal fallback dataset
+              print('Creating minimal fallback dataset...')
+              import cv2
+              import numpy as np
+              
+              # Create a more realistic test image with visible objects
+              img = np.zeros((480, 640, 3), dtype=np.uint8)
+              img[:] = (100, 150, 200)  # Blue background
+              
+              # Draw person-like shape
+              cv2.rectangle(img, (250, 150), (350, 400), (139, 69, 19), -1)  # Body
+              cv2.circle(img, (300, 130), 25, (255, 220, 177), -1)  # Head
+              
+              # Draw car-like shape
+              cv2.rectangle(img, (450, 350), (600, 420), (0, 0, 255), -1)  # Car body
+              cv2.circle(img, (470, 410), 15, (0, 0, 0), -1)  # Wheel 1
+              cv2.circle(img, (580, 410), 15, (0, 0, 0), -1)  # Wheel 2
+              
+              cv2.imwrite('data/samples/test_image.jpg', img)
+              cv2.imwrite('data/samples/pose_sample.jpg', img)
+              print('✓ Fallback test images created')
+          "
+          
+      - name: Verify test data
+        run: |
+          ls -la data/samples/
           python -c "
           import cv2
-          import numpy as np
-          # Create dummy test images
-          dummy_img = np.zeros((100, 100, 3), dtype=np.uint8)
-          cv2.imwrite('data/samples/test_image.jpg', dummy_img)
-          cv2.imwrite('data/samples/pose_sample.jpg', dummy_img)
+          import os
+          
+          # Check if test images are readable and not empty
+          test_files = ['test_image.jpg', 'pose_sample.jpg']
+          for filename in test_files:
+              filepath = f'data/samples/{filename}'
+              if os.path.exists(filepath):
+                  img = cv2.imread(filepath)
+                  if img is not None:
+                      print(f'✓ {filename}: {img.shape} - Valid image')
+                  else:
+                      print(f'✗ {filename}: Failed to load')
+              else:
+                  print(f'✗ {filename}: File not found')
           "
           
       - name: Run linting
