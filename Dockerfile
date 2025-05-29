@@ -22,7 +22,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
 # Copy project files
 COPY . .
@@ -35,8 +35,8 @@ RUN useradd -m -u 1000 visionflow && \
     chown -R visionflow:visionflow /app
 USER visionflow
 
-# Expose port for web interface (if needed)
-EXPOSE 8050
+# Expose port for Cloud Run
+EXPOSE 8080
 
-# Default command
-CMD ["python", "scripts/run_webcam.py"]
+# Run web server with Gunicorn
+CMD ["gunicorn", "--workers=1", "--threads=2", "--bind=0.0.0.0:8080", "scripts.run_webcam:app"]
