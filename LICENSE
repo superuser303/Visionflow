@@ -1,5 +1,34 @@
-MIT License
+Here is a more polished and professional version of the license section for your Visionflow repository:
 
-Copyright (c) [year] [fullname]
+---
 
-Permission is hereby granted...
+## 📜 License
+
+This project is licensed under the **MIT License**. For full terms, please refer to the [LICENSE](https://github.com/superuser303/Visionflow/blob/main/LICENSE) file in this repository.
+
+## 🧩 Third-Party Dependencies and Licensing
+
+The Visionflow project incorporates third-party libraries, datasets, and pre-trained models that are subject to their own licensing terms. By using or distributing this project, you acknowledge and agree to comply with the applicable licenses of all integrated components.
+
+### Notable Dependencies
+
+* **COCO API**
+
+  * License: [Apache License 2.0](https://github.com/cocodataset/cocoapi/blob/master/LICENSE)
+  * Usage: For dataset formatting and evaluation procedures.
+* **Pre-trained Models**
+
+  * Source: Various open-source model zoos (e.g., PyTorch, TensorFlow)
+  * License: Varies by provider (may include MIT, Apache 2.0, CC-BY, or research-only clauses)
+  * Note: Redistribution or fine-tuning of these models must comply with the original license terms.
+
+## ⚠️ Compliance and Attribution
+
+* Users and contributors must ensure that any reused third-party content (code, datasets, models) complies with the respective license terms.
+* Proper attribution must be given for all incorporated libraries and models, as required by their licenses.
+* Some pre-trained models or datasets may be restricted to **non-commercial** or **research-only** use. These restrictions must be respected when deploying or distributing derivative works.
+
+## 📎 Recommendation
+
+If you intend to redistribute this project or incorporate it into a commercial product, it is strongly recommended to review the license terms of all third-party components and, where applicable, seek legal advice to ensure full compliance.
+
