@@ -39,4 +39,4 @@ USER visionflow
 EXPOSE 8080
 
 # Run web server with Gunicorn
-CMD ["gunicorn", "--workers=1", "--threads=2", "--bind=0.0.0.0:8080", "scripts.run_webcam:app"]
+CMD ["gunicorn", "--workers=1", "--threads=2", "--bind=0.0.0.0:8080", "scripts.web:app.server"]
