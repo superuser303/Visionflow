@@ -22,7 +22,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt gunicorn
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
 COPY . .
@@ -30,13 +30,14 @@ COPY . .
 # Set Python path
 ENV PYTHONPATH=/app
 
-# Create non-root user for security
+# Create non-root user and fix Ultralytics permissions
 RUN useradd -m -u 1000 visionflow && \
-    chown -R visionflow:visionflow /app
+    mkdir -p /home/visionflow/.config/Ultralytics && \
+    chown -R visionflow:visionflow /app /home/visionflow/.config/Ultralytics
 USER visionflow
 
 # Expose port for Cloud Run
 EXPOSE 8080
 
 # Run web server with Gunicorn
-CMD ["gunicorn", "--workers=1", "--threads=2", "--bind=0.0.0.0:8080", "scripts.web:app.server"]
+CMD ["gunicorn", "--workers=1", "--threads=2", "--bind=0.0.0.0:8080", "scripts.web:app"]
